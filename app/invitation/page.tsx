@@ -8,7 +8,11 @@ export default function InvitationPage() {
     <>
       <FullscreenControl />
       <DetailShell animated>
-        <p className="detail__headline">YOU ARE INVITED</p>
+        <p className="detail__headline">
+          YOU ARE
+          <br />
+          INVITED
+        </p>
         <p className="detail__subtitle">FOR THE ENGAGEMENT OF</p>
 
         <div className="detail__names">
@@ -20,8 +24,11 @@ export default function InvitationPage() {
         <p className="detail__date">15.08.2026</p>
         <p className="detail__venue">Beatriss Restaurant and Cafe</p>
         <p className="detail__address">
-          Jl. Wijaya II No.77, RT.1/RW.5, Melawai, Kec. Kby. Baru, Kota Jakarta
-          Selatan, Daerah Khusus Ibukota Jakarta 12160
+          Jl. Wijaya II No.77, RT.1/RW.5, Melawai, Kec. Kby.
+          <br />
+          Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota
+          <br />
+          Jakarta 12160
         </p>
 
         <a

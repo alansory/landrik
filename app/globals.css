@@ -410,6 +410,12 @@ html.immersive-invitation .detail {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  background-color: #e8e2d6;
+}
+
+.detail--waiting .detail__roses,
+.detail--waiting .detail__content {
+  opacity: 0;
 }
 
 .detail__frame {

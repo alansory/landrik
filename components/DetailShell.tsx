@@ -1,5 +1,7 @@
+"use client";
+
 import Image from "next/image";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 type DetailShellProps = {
   children: ReactNode;
@@ -10,16 +12,28 @@ export default function DetailShell({
   children,
   animated = false,
 }: DetailShellProps) {
+  const [bgReady, setBgReady] = useState(!animated);
+
+  const handleBgReady = () => {
+    setBgReady(true);
+  };
+
   return (
-    <main className={`detail${animated ? " detail--enter" : ""}`}>
+    <main
+      className={`detail${animated && bgReady ? " detail--enter" : ""}${
+        animated && !bgReady ? " detail--waiting" : ""
+      }`}
+    >
       <div className="detail__frame" aria-hidden="true">
         <Image
-          src="/img/bg2.png"
+          src="/img/bg2.webp"
           alt=""
           fill
           priority
+          fetchPriority="high"
           className="detail__background"
           sizes="100vw"
+          onLoad={handleBgReady}
         />
       </div>
 
