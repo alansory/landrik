@@ -543,7 +543,7 @@ html.immersive-invitation .detail {
 .detail__date-day,
 .detail__date-month {
   font-size: clamp(0.52rem, 2.1vw, 0.62rem);
-  font-weight: 400;
+  font-weight: 800;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #3a3a3a;
