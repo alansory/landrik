@@ -12,30 +12,8 @@ import {
 import { usePathname } from "next/navigation";
 import { SpeakerSimpleHigh, SpeakerSlash } from "@phosphor-icons/react";
 
-const VIDEO_ID = "TSkBIOEq2AA";
+const MUSIC_SRC = "/music/engagement.mp3";
 export const MUSIC_KEY = "landrik-music";
-
-function buildEmbedUrl() {
-  const params = new URLSearchParams({
-    autoplay: "1",
-    loop: "1",
-    playlist: VIDEO_ID,
-    controls: "0",
-    disablekb: "1",
-    fs: "0",
-    modestbranding: "1",
-    playsinline: "1",
-    rel: "0",
-    enablejsapi: "1",
-    mute: "0",
-  });
-
-  if (typeof window !== "undefined") {
-    params.set("origin", window.location.origin);
-  }
-
-  return `https://www.youtube-nocookie.com/embed/${VIDEO_ID}?${params.toString()}`;
-}
 
 type MusicContextValue = {
   playOnOpen: () => void;
@@ -58,35 +36,52 @@ type MusicProviderProps = {
 };
 
 export default function MusicProvider({ children }: MusicProviderProps) {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const pathname = usePathname();
   const [playing, setPlaying] = useState(false);
 
-  const startPlayback = useCallback(() => {
-    const iframe = iframeRef.current;
-    if (!iframe) return;
+  const startPlayback = useCallback(async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
 
-    const nextSrc = buildEmbedUrl();
-    if (iframe.src !== nextSrc) {
-      iframe.src = nextSrc;
+    sessionStorage.setItem(MUSIC_KEY, "playing");
+
+    try {
+      await audio.play();
+      setPlaying(true);
+    } catch {
+      setPlaying(false);
     }
-
-    setPlaying(true);
   }, []);
 
   const pausePlayback = useCallback(() => {
-    const iframe = iframeRef.current;
-    if (!iframe) return;
+    const audio = audioRef.current;
+    if (!audio) return;
 
-    iframe.src = "about:blank";
+    audio.pause();
     sessionStorage.removeItem(MUSIC_KEY);
     setPlaying(false);
   }, []);
 
   const playOnOpen = useCallback(() => {
-    sessionStorage.setItem(MUSIC_KEY, "playing");
-    startPlayback();
+    void startPlayback();
   }, [startPlayback]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handlePlaying = () => setPlaying(true);
+    const handlePause = () => setPlaying(false);
+
+    audio.addEventListener("playing", handlePlaying);
+    audio.addEventListener("pause", handlePause);
+
+    return () => {
+      audio.removeEventListener("playing", handlePlaying);
+      audio.removeEventListener("pause", handlePause);
+    };
+  }, []);
 
   useEffect(() => {
     const shouldPlay =
@@ -94,7 +89,7 @@ export default function MusicProvider({ children }: MusicProviderProps) {
       sessionStorage.getItem(MUSIC_KEY) === "playing";
 
     if (shouldPlay && !playing) {
-      startPlayback();
+      void startPlayback();
     }
   }, [pathname, playing, startPlayback]);
 
@@ -104,19 +99,15 @@ export default function MusicProvider({ children }: MusicProviderProps) {
       return;
     }
 
-    sessionStorage.setItem(MUSIC_KEY, "playing");
-    startPlayback();
+    void startPlayback();
   }, [playing, pausePlayback, startPlayback]);
 
   return (
     <MusicContext.Provider value={{ playOnOpen, toggle, playing }}>
       {children}
-      <iframe
-        ref={iframeRef}
-        className="music-player"
-        title="Background music"
-        allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-      />
+      <audio ref={audioRef} className="music-player" loop preload="auto">
+        <source src={encodeURI(MUSIC_SRC)} type="audio/mpeg" />
+      </audio>
       <button
         type="button"
         className="music-toggle"
