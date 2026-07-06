@@ -506,13 +506,63 @@ html.immersive-invitation .detail {
   margin: 0.1rem 0 0.05rem;
 }
 
-.detail__date {
-  font-size: clamp(0.82rem, 3.4vw, 0.92rem);
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  color: #3a3a3a;
+.detail__schedule {
+  width: 100%;
   margin-top: 1.15rem;
   margin-bottom: 0.65rem;
+}
+
+.detail__date-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.detail__date-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0 0.35rem;
+}
+
+.detail__date-line {
+  display: block;
+  width: min(100%, 4.25rem);
+  height: 1px;
+  background-color: #3a3a3a;
+}
+
+.detail__date-day,
+.detail__date-month {
+  font-size: clamp(0.52rem, 2.1vw, 0.62rem);
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #3a3a3a;
+  text-indent: 0.3em;
+  line-height: 1.2;
+}
+
+.detail__date-num {
+  font-size: clamp(1.85rem, 8.5vw, 2.35rem);
+  font-weight: 400;
+  line-height: 1;
+  color: #3a3a3a;
+  padding: 0 0.7rem;
+  border-left: 1px solid #3a3a3a;
+  border-right: 1px solid #3a3a3a;
+}
+
+.detail__time {
+  margin-top: 0.8rem;
+  font-size: clamp(0.62rem, 2.5vw, 0.72rem);
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  color: #3a3a3a;
+  text-align: center;
+  text-indent: 0.14em;
 }
 
 .detail__venue {
@@ -612,7 +662,7 @@ html.immersive-invitation .detail {
   animation: name-reveal 1.05s cubic-bezier(0.16, 1, 0.3, 1) 2.25s both;
 }
 
-.detail--enter .detail__date {
+.detail--enter .detail__schedule {
   animation: letter-reveal 1.05s cubic-bezier(0.16, 1, 0.3, 1) 2.55s both;
 }
 
@@ -633,7 +683,7 @@ html.immersive-invitation .detail {
   .detail--enter .detail__subtitle,
   .detail--enter .detail__name,
   .detail--enter .detail__and,
-  .detail--enter .detail__date,
+  .detail--enter .detail__schedule,
   .detail--enter .detail__venue,
   .detail--enter .detail__address,
   .detail--enter .detail__location-btn {
