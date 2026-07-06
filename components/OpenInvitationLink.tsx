@@ -9,10 +9,10 @@ export default function OpenInvitationLink() {
   const searchParams = useSearchParams();
   const { playOnOpen } = useMusic();
 
-  const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     playOnOpen();
-    await enterInvitationFullscreen();
+    void enterInvitationFullscreen();
 
     const query = searchParams.toString();
     router.push(query ? `/invitation?${query}` : "/invitation");

@@ -10,8 +10,9 @@ import {
   type ReactNode,
 } from "react";
 import { usePathname } from "next/navigation";
+import { SpeakerSimpleHigh, SpeakerSlash } from "@phosphor-icons/react";
 
-const VIDEO_ID = "_QWZQh0YYWA";
+const VIDEO_ID = "TSkBIOEq2AA";
 export const MUSIC_KEY = "landrik-music";
 
 function buildEmbedUrl() {
@@ -25,9 +26,15 @@ function buildEmbedUrl() {
     modestbranding: "1",
     playsinline: "1",
     rel: "0",
+    enablejsapi: "1",
+    mute: "0",
   });
 
-  return `https://www.youtube.com/embed/${VIDEO_ID}?${params.toString()}`;
+  if (typeof window !== "undefined") {
+    params.set("origin", window.location.origin);
+  }
+
+  return `https://www.youtube-nocookie.com/embed/${VIDEO_ID}?${params.toString()}`;
 }
 
 type MusicContextValue = {
@@ -59,7 +66,11 @@ export default function MusicProvider({ children }: MusicProviderProps) {
     const iframe = iframeRef.current;
     if (!iframe) return;
 
-    iframe.src = buildEmbedUrl();
+    const nextSrc = buildEmbedUrl();
+    if (iframe.src !== nextSrc) {
+      iframe.src = nextSrc;
+    }
+
     setPlaying(true);
   }, []);
 
@@ -104,15 +115,23 @@ export default function MusicProvider({ children }: MusicProviderProps) {
         ref={iframeRef}
         className="music-player"
         title="Background music"
-        allow="autoplay; encrypted-media"
+        allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
       />
       <button
         type="button"
         className="music-toggle"
         onClick={toggle}
-        aria-label={playing ? "Pause music" : "Play music"}
+        aria-label={playing ? "Stop music" : "Play music"}
       >
-        {playing ? "♫" : "♪"}
+        {playing ? (
+          <SpeakerSimpleHigh
+            className="music-toggle__icon"
+            size={18}
+            weight="regular"
+          />
+        ) : (
+          <SpeakerSlash className="music-toggle__icon" size={18} weight="regular" />
+        )}
       </button>
     </MusicContext.Provider>
   );
